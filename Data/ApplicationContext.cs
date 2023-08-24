@@ -9,6 +9,7 @@ public class ApplicationContext : DbContext
 	public DbSet<Site> Sites => Set<Site>();
 	public DbSet<Page> Pages => Set<Page>();
 	public DbSet<Token> Tokens => Set<Token>();
+	public DbSet<Counter> Counters => Set<Counter>();
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
@@ -22,7 +23,7 @@ public class ApplicationContext : DbContext
 		{
 			token.HasKey(t => t.Type);
 
-			token.HasMany<Site>(t => t.Urls);
+			token.HasMany<Counter>(t => t.Pages);
 		});
 
 		builder.Entity<Page>(page =>
@@ -31,7 +32,7 @@ public class ApplicationContext : DbContext
 
 			page.Property(p => p.Text).IsRequired();
 
-			page.Property(p => p.LastUpdate).HasDefaultValue(DateOnly.FromDateTime(DateTime.Now));
+			page.Property(p => p.LastUpdate).HasDefaultValue(DateOnly.FromDateTime(DateTime.Now)).IsRequired();
 
 
 			page.HasOne<Site>(p => p.Site);
@@ -45,7 +46,16 @@ public class ApplicationContext : DbContext
 
 			site.Property(p => p.Name).IsRequired();
 
-			site.Property(p => p.LastUpdate).HasDefaultValue(DateOnly.FromDateTime(DateTime.Now));
+			site.Property(p => p.LastUpdate).HasDefaultValue(DateOnly.FromDateTime(DateTime.Now)).IsRequired();
+		});
+
+		builder.Entity<Counter>(counter =>
+		{
+			counter.HasKey(c => c.Id);
+
+			counter.Property(c => c.Entries).HasDefaultValue(1).IsRequired();
+
+			counter.HasOne(c => c.Page).WithMany().HasForeignKey(c => c.Url);
 		});
 	}
 }

@@ -13,8 +13,7 @@ public class Token
     /// </summary>
     public string Type { get; set; }
     /// <summary>
-    /// IEnumerable of urls with cites includes this type in text
-    /// Should be prioritized
+    /// IEnumerable of Counters with cites includes this type in text
     /// </summary>
-    public IEnumerable<Site>? Urls { get; set; }
+    public IEnumerable<Counter>? Pages { get; set; }
 }
