@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Xml.Linq;
 
-namespace SearchEngine.Data.Models;
+namespace SearchEngine.Models;
 
 public class Page
 {

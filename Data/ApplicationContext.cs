@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using SearchEngine.Data.Models;
+using SearchEngine.Models;
 
 namespace SearchEngine.Data;
 
