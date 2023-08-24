@@ -12,8 +12,9 @@ public class Token
     /// The string of token
     /// </summary>
     public string Type { get; set; }
+
     /// <summary>
     /// IEnumerable of Counters with cites includes this type in text
     /// </summary>
-    public IEnumerable<Counter>? Pages { get; set; }
+    public List<Counter> Pages { get; set; } = new();
 }
