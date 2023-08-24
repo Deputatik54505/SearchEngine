@@ -1,7 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using SearchEngine.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+var config = new ConfigurationManager();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddDbContext<ApplicationContext>();
+
 
 var app = builder.Build();
 
