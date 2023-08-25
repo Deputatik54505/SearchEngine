@@ -30,7 +30,7 @@ public class ApplicationContext : DbContext
 		{
 			page.HasKey(p => p.Url);
 
-			page.Property(p => p.Text).IsRequired();
+			page.Property(p => p.Html).IsRequired();
 
 			page.Property(p => p.LastUpdate).HasDefaultValue(DateOnly.FromDateTime(DateTime.Now)).IsRequired();
 

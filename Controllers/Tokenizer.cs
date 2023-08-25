@@ -1,4 +1,9 @@
-﻿using SearchEngine.Data.Repositories;
+﻿using System.Reflection;
+using System.Text;
+using System.Web;
+using Aspose.Html;
+using Aspose.Html.Dom;
+using SearchEngine.Data.Repositories;
 using SearchEngine.Models;
 
 namespace SearchEngine.Controllers;
@@ -16,7 +21,7 @@ public class Tokenizer
 	//TODO optimize this thing, if needed 
 	public void Tokenize(Page page)
 	{
-		foreach (var word in page.Text.Split(Splitter))
+		foreach (var word in ParseText(page).Split(Splitter))
 		{
 			Counter? counter;
 			var type = _repository.GetAsync(word).Result;
@@ -41,5 +46,22 @@ public class Tokenizer
 			type.Pages.Add(counter);
 			_repository.Update(type);
 		}
+	}
+
+	public static string ParseText(Page page)
+	{
+		var url = new Url(page.Url);
+		var sb = new StringBuilder();
+
+		using var document = new HTMLDocument(page.Html, url);
+
+		var iterator = document.CreateNodeIterator(document, 
+			Aspose.Html.Dom.Traversal.Filters.NodeFilter.SHOW_TEXT);
+
+		while (iterator.NextNode() is { } node)
+		{
+			sb.Append(node.NodeValue);
+		}
+		return sb.ToString();
 	}
 }

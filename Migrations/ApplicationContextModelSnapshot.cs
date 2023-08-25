@@ -64,7 +64,7 @@ namespace SearchEngine.Migrations
                     b.Property<string>("SiteUrl")
                         .HasColumnType("text");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("Html")
                         .IsRequired()
                         .HasColumnType("text");
 

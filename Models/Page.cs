@@ -5,14 +5,14 @@ namespace SearchEngine.Models;
 
 public class Page
 {
-    public Page(string url, string text)
+    public Page(string url, string html)
     {
         Url = url;
-        Text = text;
+        Html = html;
         LastUpdate = DateOnly.FromDateTime(DateTime.Now);
     }
     public string Url { get; set; }
     public Site? Site { get; set; }
-    public string Text { get; set; }
+    public string Html { get; set; }
     public DateOnly LastUpdate { get; set; }
 }
