@@ -1,8 +1,5 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Web;
+﻿using System.Text;
 using Aspose.Html;
-using Aspose.Html.Dom;
 using SearchEngine.Data.Repositories;
 using SearchEngine.Models;
 
@@ -12,7 +9,7 @@ public class Tokenizer
 {
 	private readonly ITokenRepository _repository;
 	//private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
-	private const string Splitter = " ";
+	public const string Splitter = " ";
 
 	public Tokenizer(ITokenRepository repository)
 	{
