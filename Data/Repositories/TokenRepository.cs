@@ -17,7 +17,7 @@ public class TokenRepository : ITokenRepository
 	public async Task<Token?> GetAsync(string type)
 	{
 		_logger.Trace($"searching for token {type}");
-		return await _context.Tokens.FirstOrDefaultAsync(token => token.Type.Equals(type));
+		return await _context.Tokens.Include(t => t.Pages).FirstOrDefaultAsync(token => token.Type.Equals(type));
 	}
 
 	public bool Create(Token token)

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.InteropServices.JavaScript;
+using System.Text;
 using System.Text.RegularExpressions;
 using Aspose.Html;
 using Aspose.Html.Dom;
@@ -12,7 +13,7 @@ public class Tokenizer
 {
     private readonly ITokenRepository _repository;
     private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
-    public const string Splitter = " ";
+    public static readonly string[] Splitter = { " ",",",".",")","(" };
 
     public Tokenizer(ITokenRepository repository)
     {
@@ -22,9 +23,16 @@ public class Tokenizer
     //TODO optimize this thing, if needed 
     public void Tokenize(Page page)
     {
-        foreach (var word in ParseText(page).Split(Splitter))
+        foreach (var abc in ParseText(page).Split(Splitter,StringSplitOptions.RemoveEmptyEntries))
         {
-            Counter? counter;
+            if (string.IsNullOrWhiteSpace(abc) || abc.Any(c=>!char.IsLetterOrDigit(c)))
+                continue;
+	        var word = abc.ToLower();
+
+            if (!char.IsLetter(word[^1]))
+                word = word.Remove(word.Length - 1, 1);
+
+	        Counter? counter;
             var type = _repository.GetAsync(word).Result;
             if (type != null)
             {
@@ -54,20 +62,29 @@ public class Tokenizer
     public static string ParseText(Page page)
     {
 	    string HTMLCode = page.Html;
+
 		// Remove new lines since they are not visible in HTML  
 		HTMLCode = HTMLCode.Replace("\n", " ");
+
 		// Remove tab spaces  
 		HTMLCode = HTMLCode.Replace("\t", " ");
+
 		// Remove multiple white spaces from HTML  
 		HTMLCode = Regex.Replace(HTMLCode, "\\s+", " ");
+
 		// Remove HEAD tag  
-		HTMLCode = Regex.Replace(HTMLCode, "<head.*?</head>", ""
+		HTMLCode = Regex.Replace(HTMLCode, "<head.*?</head>", " "
 			, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
 		// Remove any JavaScript  
-		HTMLCode = Regex.Replace(HTMLCode, "<script.*?</script>", ""
+		HTMLCode = Regex.Replace(HTMLCode, "<script.*?</script>", " "
+			, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        // Remove any Style sections
+		HTMLCode = Regex.Replace(HTMLCode, "<style.*?</style>", " "
 			, RegexOptions.IgnoreCase | RegexOptions.Singleline);
 		// Replace special characters like &, <, >, " etc.  
 		StringBuilder sbHTML = new StringBuilder(HTMLCode);
+
 		// Note: There are many more special characters, these are just  
 		// most common. You can add new characters in this arrays if needed  
 		string[] OldWords = {"&nbsp;", "&amp;", "&quot;", "&lt;",
@@ -83,6 +100,6 @@ public class Tokenizer
 		sbHTML.Replace("<p ", "\n<p ");
 		// Finally, remove all HTML tags and return plain text  
 		return System.Text.RegularExpressions.Regex.Replace(
-			sbHTML.ToString(), "<[^>]*>", "");
+			sbHTML.ToString(), "<[^>]*>", " ");
 	}
 }

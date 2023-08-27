@@ -19,7 +19,7 @@ public class SearchController : Controller
 
 	public IActionResult Search(string searchString, int onPage = 10)
 	{
-		var tokens = searchString.Split(Tokenizer.Splitter);
+		var tokens = searchString.Split(Tokenizer.Splitter, StringSplitOptions.RemoveEmptyEntries);
 
 		var rating = new Dictionary<string, int>();
 
