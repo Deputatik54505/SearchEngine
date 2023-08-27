@@ -28,6 +28,7 @@ public class SiteRepository : ISiteRepository
 			return false;
 		}
 
+		site.LastUpdate = DateOnly.FromDateTime(DateTime.Now);
 		_context.Sites.Add(site);
 		return Save();
 	}
@@ -40,6 +41,7 @@ public class SiteRepository : ISiteRepository
 			return false;
 		}
 
+		site.LastUpdate = DateOnly.FromDateTime(DateTime.Now);
 		_context.Sites.Update(site);
 		return Save();
 	}

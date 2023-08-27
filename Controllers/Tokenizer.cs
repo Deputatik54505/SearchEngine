@@ -16,6 +16,7 @@ public class Tokenizer
 	{
 		_repository = repository;
 	}
+
 	//TODO optimize this thing, if needed 
 	public void Tokenize(Page page)
 	{

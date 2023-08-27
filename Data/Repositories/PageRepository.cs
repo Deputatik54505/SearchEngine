@@ -28,6 +28,8 @@ public class PageRepository : IPageRepository
 			_logger.Warn($"page with url {page.Url} already in context");
 			return false;
 		}
+
+		page.LastUpdate = DateOnly.FromDateTime(DateTime.Now);
 		_logger.Trace($"adding page {page} in context");
 		_context.Pages.Add(page);
 		return Save();
@@ -41,6 +43,7 @@ public class PageRepository : IPageRepository
 			return false;
 		}
 
+		page.LastUpdate = DateOnly.FromDateTime(DateTime.Now);
 		_logger.Trace($"updating page {page}");
 		_context.Pages.Update(page);
 		return Save();
