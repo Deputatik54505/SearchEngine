@@ -2,13 +2,14 @@
 using Aspose.Html;
 using SearchEngine.Data.Repositories;
 using SearchEngine.Models;
+using ILogger = NLog.ILogger;
 
 namespace SearchEngine.Controllers;
 
 public class Tokenizer
 {
 	private readonly ITokenRepository _repository;
-	//private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
+	private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
 	public const string Splitter = " ";
 
 	public Tokenizer(ITokenRepository repository)

@@ -4,8 +4,6 @@ using ILogger = NLog.ILogger;
 
 namespace SearchEngine.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
 public class SearchController : Controller
 {
 	private readonly IPageRepository _pageRepository;
@@ -19,8 +17,7 @@ public class SearchController : Controller
 	}
 
 
-	[HttpGet]
-	public IActionResult Search(string searchString, int onPage)
+	public IActionResult Search(string searchString, int onPage = 10)
 	{
 		var tokens = searchString.Split(Tokenizer.Splitter);
 
@@ -44,10 +41,17 @@ public class SearchController : Controller
 			}
 		}
 
-		var list = rating.OrderByDescending(v => v.Value).Take(onPage).ToList();
+		var pages = rating
+			.OrderByDescending(v => v.Value)
+			.Take(onPage)
+			.Select(v => v.Key)
+			.ToList()
+			.Select(item => _pageRepository.GetAsync(item).Result)
+			.Where(page => page != null)
+			.ToList();
 
-
-		return Ok(list);
+		return View(pages);
 	}
-	
+
+
 }

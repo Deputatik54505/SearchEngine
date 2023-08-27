@@ -1,0 +1,29 @@
+#cnt, #mngb, #searchform, .gssb_c, .sfbgx {
+    display: none
+}
+
+div#easter-egg {
+    font-size: medium;
+    background-color: #fff;
+    color: #000
+}
+
+#browser-window a, #browser-window a:visited {
+    color: #00e !important
+}
+
+    #browser-window a:active {
+        color: red !important
+    }
+
+div.nav {
+    margin-top: 1ex
+}
+
+    div.nav A, span.nav {
+        font-size: 8pt
+    }
+
+    div.nav A {
+        color: #000
+    }

@@ -1,15 +1,49 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using SearchEngine.Controllers
+@using System.Security.Cryptography.X509Certificates
+@using System.Net
+
+@{
+	ViewData["Title"] = "Google";
 }
 
+
 <div class="html-center">
-	<div style="text-align: center;" id="search-wrapper">
-		<center><img src="./Images/google.jpg" width="351" height="113" alt="Google in 1998!"></center>
-		<center><table border="0" width="86%"><tbody><tr><td bgcolor="#EEEEEE" colspan="3"><center id="search-wrapper"><p>Search the web using Google!</p><input type="text" name="q" value="" size="40"><br><div id="btn-w"><input type="submit" name="s" value="Google Search" onclick="if (!window.__cfRLUnblockHandlers) return false; return!(location.href=&quot;./search/&quot;)">&nbsp; <input type="submit" name="sa" value="I'm feeling lucky" onclick="if (!window.__cfRLUnblockHandlers) return false; return!(location.href=&quot;./search/&quot;)"></div></center></td></tr><tr><td width="37%" bgcolor="#7EE5DA"><center>Special Searches<br><a href="https://www.google.com/stanford" onclick="if (!window.__cfRLUnblockHandlers) return false; return!1">Stanford Search</a><br><a href="https://www.google.com/linux" onclick="if (!window.__cfRLUnblockHandlers) return false; return!1">Linux Search</a><br></center></td><td bgcolor="#70CCC2"><center><font size="-1"><a href="https://www.google.com/help.html" onclick="if (!window.__cfRLUnblockHandlers) return false; return!1">Help!</a><br><a href="https://www.google.com/about.html" onclick="if (!window.__cfRLUnblockHandlers) return false; return!1">About Google!</a><br><a href="https://www.google.com/company.html" onclick="if (!window.__cfRLUnblockHandlers) return false; return!1">Company Info</a><br><a href="https://www.google.com/stickers.html" onclick="if (!window.__cfRLUnblockHandlers) return false; return!1">Google! Logos</a><br></font></center></td><td align="right" bgcolor="#62B3AA"><center><font size="-1">Get Google!<br>updates monthly:<br><input type="hidden" name="listname" value="google-friends"> <input type="text" name="emailaddr" value="your e-mail"><br><input type="submit" name="SubmitAction" value="Subscribe" onclick="if (!window.__cfRLUnblockHandlers) return false; return!1"> &nbsp;&nbsp; <font size="-1"><a href="javascript:void(0)">Archive</a></font></font></center></td></tr></tbody></table></center>
+	<div style="text-align: center;">
+		<center>
+			<img src="./Images/google.jpg" width="351" height="113" alt="Google in 1998!">
+		</center>
+
+		<center>
+
+			<table width="86%">
+				<tbody>
+					<tr>
+						<td bgcolor="#EEEEEE" colspan="3">
+							<center id="search-wrapper">
+								@using (Html.BeginForm("Search", "Search"))
+								{
+									<p>Search the web using Google!</p>
+									<input type="text" name="searchString" size="40">
+									<br>
+									<div id="btn-w">
+										<input value="Search" type="submit" />       
+									</div>
+								}
+							</center>
+						</td>
+					</tr>
+			</table>
+		</center>
+
+
 		<p><br></p>
-		<center><font size="-1">Copyright ©1998 Google Inc.</font></center>
+
+
+		<center>
+			<font size="1">Copyright ©1998 Google Inc.</font>
+		</center>
 		<p></p>
 
-		
+
 	</div>
 </div>
