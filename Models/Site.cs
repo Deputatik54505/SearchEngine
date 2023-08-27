@@ -6,9 +6,8 @@
 public class Site
 {
 
-    public Site(string ipAddress, string name, string url)
+    public Site(string name, string url)
     {
-        IpAddress = ipAddress;
         Name = name;
         Url = url;
         LastUpdate = DateOnly.FromDateTime(DateTime.Now);
@@ -17,7 +16,7 @@ public class Site
     /// <summary>
     /// Actual IP address of website
     /// </summary>
-    public string IpAddress { get; set; }
+    public string? IpAddress { get; set; }
 
     /// <summary>
     /// Name of website for search engine

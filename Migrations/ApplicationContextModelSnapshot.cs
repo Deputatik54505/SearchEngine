@@ -56,16 +56,16 @@ namespace SearchEngine.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("text");
 
+                    b.Property<string>("Html")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateOnly>("LastUpdate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
-                        .HasDefaultValue(new DateOnly(2023, 8, 25));
+                        .HasDefaultValue(new DateOnly(2023, 8, 27));
 
                     b.Property<string>("SiteUrl")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Html")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Url");
@@ -81,13 +81,12 @@ namespace SearchEngine.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("IpAddress")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateOnly>("LastUpdate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
-                        .HasDefaultValue(new DateOnly(2023, 8, 25));
+                        .HasDefaultValue(new DateOnly(2023, 8, 27));
 
                     b.Property<string>("Name")
                         .IsRequired()

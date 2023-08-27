@@ -23,7 +23,7 @@ public class ApplicationContext : DbContext
 		{
 			token.HasKey(t => t.Type);
 
-			token.HasMany<Counter>(t => t.Pages);
+			token.HasMany(t => t.Pages);
 		});
 
 		builder.Entity<Page>(page =>
@@ -34,15 +34,14 @@ public class ApplicationContext : DbContext
 
 			page.Property(p => p.LastUpdate).HasDefaultValue(DateOnly.FromDateTime(DateTime.Now)).IsRequired();
 
-
-			page.HasOne<Site>(p => p.Site);
+			page.HasOne(p => p.Site);
 		});
 
 		builder.Entity<Site>(site =>
 		{
 			site.HasKey(p => p.Url);
 
-			site.Property(p => p.LastUpdate).IsRequired();
+			site.Property(p => p.IpAddress);
 
 			site.Property(p => p.Name).IsRequired();
 

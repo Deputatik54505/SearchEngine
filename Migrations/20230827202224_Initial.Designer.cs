@@ -12,8 +12,8 @@ using SearchEngine.Data;
 namespace SearchEngine.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230824231239_CounterAdded")]
-    partial class CounterAdded
+    [Migration("20230827202224_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,16 +59,16 @@ namespace SearchEngine.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("text");
 
+                    b.Property<string>("Html")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateOnly>("LastUpdate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
-                        .HasDefaultValue(new DateOnly(2023, 8, 25));
+                        .HasDefaultValue(new DateOnly(2023, 8, 27));
 
                     b.Property<string>("SiteUrl")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Url");
@@ -84,13 +84,12 @@ namespace SearchEngine.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("IpAddress")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateOnly>("LastUpdate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
-                        .HasDefaultValue(new DateOnly(2023, 8, 25));
+                        .HasDefaultValue(new DateOnly(2023, 8, 27));
 
                     b.Property<string>("Name")
                         .IsRequired()
