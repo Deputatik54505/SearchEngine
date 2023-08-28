@@ -32,7 +32,7 @@
 							{
 								//TODO: pass the search string through a call
 								<input maxlength="256" name="searchString" size="31" type="text"
-								       value="">
+									   value="">
 								<select name="num">
 									<option selected="" value="10">10 results</option>
 								</select>
@@ -61,14 +61,18 @@
 		@foreach (var page in Model)
 		{
 			<p>
-				<a class="nj" target="_blank" href="http://www.lib.berkeley.edu/TeachingLib/Guides/Internet/Google.html">@(page.Url)</a>
+
+				<a class="nj" target="_blank">@(page.Site.Name)</a>
 				<font size="1">
-					@*<br>...refining searches in <b>Google</b>: Detailed Searching Instructions Teaching...<br>...University of California, Berkeley <b>Google</b> is a fairly new Web searching...<br>
-				<font color="green">www.lib.berkeley.edu/TeachingLib/Guides/Internet/Google.html -&nbsp;
-				<a class="nj" target="_blank" href="http://www.lib.berkeley.edu/TeachingLib/Guides/Internet/Google.html">Cached: 12k</a> -&nbsp;
-				<a class="nj" target="_blank" href="/search/?num=10&amp;q=related:www.lib.berkeley.edu/TeachingLib/Guides/Internet/Google.html">GoogleScout</a>
-				</font>*@
+					<br>...refining searches in <b>Google</b>: Detailed Searching Instructions Teaching...<br>...University of California, Berkeley <b>Google</b> is a fairly new Web searching...<br>
+					<font color="green">
+						www.lib.berkeley.edu/TeachingLib/Guides/Internet/Google.html -&nbsp;
+						<a class="nj" target="_blank" href="http://www.lib.berkeley.edu/TeachingLib/Guides/Internet/Google.html">Cached: 12k</a> -&nbsp;
+						<a class="nj" target="_blank" href="/search/?num=10&amp;q=related:www.lib.berkeley.edu/TeachingLib/Guides/Internet/Google.html">GoogleScout</a>
+					</font>
 				</font>
+				<a asp-controller="Page" asp-action="Index" asp-route-url="@(page.Url)" class="btn btn-sm btn-outline-secondary" type="btn btn-success"></a>
+
 			</p>
 		}
 

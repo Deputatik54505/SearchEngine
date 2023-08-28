@@ -18,7 +18,7 @@ public class PageRepository : IPageRepository
 	public async Task<Page?> GetAsync(string url)
 	{
 		_logger.Trace($"searching for page {url} in context");
-		return await _context.Pages.FirstOrDefaultAsync(page => page.Url.Equals(url));
+		return await _context.Pages.Include(p => p.Site).FirstOrDefaultAsync(page => page.Url.Equals(url));
 	}
 
 	public bool Create(Page page)
