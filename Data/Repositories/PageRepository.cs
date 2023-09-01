@@ -8,17 +8,20 @@ public class PageRepository : IPageRepository
 {
 	private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
 	private readonly ApplicationContext _context;
+	private readonly DbSet<Page> _pages;
 
 	public PageRepository(ApplicationContext context)
 	{
 		_context = context;
+		_pages = context.Pages;
 	}
 
 
 	public async Task<Page?> GetAsync(string url)
 	{
 		_logger.Trace($"searching for page {url} in context");
-		return await _context.Pages.Include(p => p.Site).FirstOrDefaultAsync(page => page.Url.Equals(url));
+		return await _pages
+			.Include(p=>p.Site).FirstOrDefaultAsync(page => page.Url.Equals(url));
 	}
 
 	public bool Create(Page page)
@@ -31,7 +34,7 @@ public class PageRepository : IPageRepository
 
 		page.LastUpdate = DateOnly.FromDateTime(DateTime.Now);
 		_logger.Trace($"adding page {page} in context");
-		_context.Pages.Add(page);
+		_pages.Add(page);
 		return Save();
 	}
 
@@ -45,8 +48,10 @@ public class PageRepository : IPageRepository
 
 		page.LastUpdate = DateOnly.FromDateTime(DateTime.Now);
 		_logger.Trace($"updating page {page}");
-		_context.Pages.Update(page);
-		return Save();
+		_pages.Update(page);
+		var isSuccessful =  _context.SaveChanges() > 0;
+		_context.Entry(page).State = EntityState.Detached;
+		return isSuccessful;
 	}
 
 	public bool Delete(Page page)
@@ -58,7 +63,8 @@ public class PageRepository : IPageRepository
 		}
 
 		_logger.Trace($"removing page {page} from context");
-		_context.Pages.Remove(page);
+
+		_pages.Remove(page);
 		return Save();
 	}
 
@@ -69,6 +75,6 @@ public class PageRepository : IPageRepository
 
 	private bool InContext(Page page)
 	{
-		return _context.Pages.FirstOrDefault(p => p.Url.Equals(page.Url)) != null;
+		return _pages.Contains(page);
 	}
 }

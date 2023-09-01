@@ -7,13 +7,13 @@ namespace SearchEngine.Controllers;
 public class SearchController : Controller
 {
 	private readonly IPageRepository _pageRepository;
-	private readonly ITokenRepository _tokenRepository;
+	private readonly CounterRepository _counterRepository;
 	private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
 
-	public SearchController(IPageRepository pageRepository, ITokenRepository tokenRepository)
+	public SearchController(IPageRepository pageRepository, CounterRepository counterRepository)
 	{
 		_pageRepository = pageRepository;
-		_tokenRepository = tokenRepository;
+		_counterRepository = counterRepository;
 	}
 
 
@@ -25,9 +25,9 @@ public class SearchController : Controller
 
 		foreach (var token in tokens)
 		{
-			var savedToken = _tokenRepository.GetAsync(token).Result;
-			if (savedToken == null) continue;
-			var tir = savedToken.Pages
+			var savedToken = _counterRepository.OfType(token);
+			if (savedToken.Count==0) continue;
+			var tir = savedToken
 				.OrderByDescending(c => c.Entries);
 
 			foreach (var counter in tir)

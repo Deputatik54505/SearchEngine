@@ -1,8 +1,7 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
-using Aspose.Html;
-using Aspose.Html.Dom;
+using Microsoft.EntityFrameworkCore;
+using SearchEngine.Data;
 using SearchEngine.Data.Repositories;
 using SearchEngine.Models;
 using ILogger = NLog.ILogger;
@@ -11,57 +10,51 @@ namespace SearchEngine.Controllers;
 
 public class Tokenizer
 {
-    private readonly ITokenRepository _repository;
-    private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
-    public static readonly string[] Splitter = { " ",",",".",")","(" };
+	private readonly ApplicationContext _context;
+	public static readonly string[] Splitter = { " ", ",", ".", ")", "(" };
 
-    public Tokenizer(ITokenRepository repository)
-    {
-        _repository = repository;
-    }
+	public Tokenizer(ApplicationContext context)
+	{
+		_context = context;
+	}
 
-    //TODO optimize this thing, if needed 
-    public void Tokenize(Page page)
-    {
-        foreach (var abc in ParseText(page).Split(Splitter,StringSplitOptions.RemoveEmptyEntries))
-        {
-            if (string.IsNullOrWhiteSpace(abc) || abc.Any(c=>!char.IsLetterOrDigit(c)))
-                continue;
-	        var word = abc.ToLower();
+	public void Tokenize(Page page)
+	{
+		foreach (var abc in ParseText(page)
+			         .Split(Splitter, StringSplitOptions.RemoveEmptyEntries))
+		{
+			if (string.IsNullOrWhiteSpace(abc) || abc.Any(c => !char.IsLetterOrDigit(c)))
+				continue;
 
-            if (!char.IsLetter(word[^1]))
-                word = word.Remove(word.Length - 1, 1);
+			var word = abc.ToLower();
 
-	        Counter? counter;
-            var type = _repository.GetAsync(word).Result;
-            if (type != null)
-            {
-                counter = type.Pages.FirstOrDefault(p => p.Url.Equals(page.Url));
-                if (counter != null)
-                {
-                    type.Pages.Remove(counter);
-                    counter.Entries++;
-                }
-                else
-                {
-                    counter = new Counter(page.Url);
-                }
-                type.Pages.Add(counter);
-                _repository.Update(type);
+			if (!char.IsLetter(word[^1]))
+				word = word.Remove(word.Length - 1, 1);
+			if (string.IsNullOrWhiteSpace(word))
+				continue;
+
+			var counter = _context.Counters.FirstOrDefault(c=>c.Token.Equals(word) && c.Url.Equals(page.Url));
+
+			if (counter == null)
+			{
+				counter = new Counter(page.Url, word);
+				_context.Add(counter);
+				_context.SaveChanges();
 			}
-            else
-            {
-                counter = new Counter(page.Url);
-                type = new Token(word);
-                type.Pages.Add(counter);
-                _repository.Create(type);
+			else
+			{
+				counter.Entries++;
+				_context.Counters.Update(counter);
+				_context.SaveChanges();
 			}
-        }
-    }
 
-    public static string ParseText(Page page)
-    {
-	    string HTMLCode = page.Html;
+			_context.Entry(counter).State = EntityState.Detached;
+		}
+	}
+
+	public static string ParseText(Page page)
+	{
+		string HTMLCode = page.Html;
 
 		// Remove new lines since they are not visible in HTML  
 		HTMLCode = HTMLCode.Replace("\n", " ");
@@ -79,7 +72,7 @@ public class Tokenizer
 		// Remove any JavaScript  
 		HTMLCode = Regex.Replace(HTMLCode, "<script.*?</script>", " "
 			, RegexOptions.IgnoreCase | RegexOptions.Singleline);
-        // Remove any Style sections
+		// Remove any Style sections
 		HTMLCode = Regex.Replace(HTMLCode, "<style.*?</style>", " "
 			, RegexOptions.IgnoreCase | RegexOptions.Singleline);
 		// Replace special characters like &, <, >, " etc.  

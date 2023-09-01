@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SearchEngine.Data;
@@ -11,9 +12,11 @@ using SearchEngine.Data;
 namespace SearchEngine.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230831085651_TokenFix")]
+    partial class TokenFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +38,7 @@ namespace SearchEngine.Migrations
                         .HasColumnType("integer")
                         .HasDefaultValue(1);
 
-                    b.Property<string>("Token")
-                        .IsRequired()
+                    b.Property<string>("TokenType")
                         .HasColumnType("text");
 
                     b.Property<string>("Url")
@@ -44,6 +46,8 @@ namespace SearchEngine.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TokenType");
 
                     b.HasIndex("Url");
 
@@ -96,8 +100,22 @@ namespace SearchEngine.Migrations
                     b.ToTable("Sites");
                 });
 
+            modelBuilder.Entity("SearchEngine.Models.Token", b =>
+                {
+                    b.Property<string>("Type")
+                        .HasColumnType("text");
+
+                    b.HasKey("Type");
+
+                    b.ToTable("Tokens");
+                });
+
             modelBuilder.Entity("SearchEngine.Models.Counter", b =>
                 {
+                    b.HasOne("SearchEngine.Models.Token", null)
+                        .WithMany("Pages")
+                        .HasForeignKey("TokenType");
+
                     b.HasOne("SearchEngine.Models.Page", "Page")
                         .WithMany()
                         .HasForeignKey("Url")
@@ -114,6 +132,11 @@ namespace SearchEngine.Migrations
                         .HasForeignKey("SiteUrl");
 
                     b.Navigation("Site");
+                });
+
+            modelBuilder.Entity("SearchEngine.Models.Token", b =>
+                {
+                    b.Navigation("Pages");
                 });
 #pragma warning restore 612, 618
         }

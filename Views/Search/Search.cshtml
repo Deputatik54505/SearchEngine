@@ -62,7 +62,7 @@
 		{
 			<p>
 
-				<a class="nj" target="_blank">@(page.Site.Name)</a>
+				<a asp-controller="Page" asp-action="Index" asp-route-url="@(page.Url)" class="nj">@(page.Site.Name)</a>
 				<font size="1">
 					<br>...refining searches in <b>Google</b>: Detailed Searching Instructions Teaching...<br>...University of California, Berkeley <b>Google</b> is a fairly new Web searching...<br>
 					<font color="green">
@@ -71,8 +71,6 @@
 						<a class="nj" target="_blank" href="/search/?num=10&amp;q=related:www.lib.berkeley.edu/TeachingLib/Guides/Internet/Google.html">GoogleScout</a>
 					</font>
 				</font>
-				<a asp-controller="Page" asp-action="Index" asp-route-url="@(page.Url)" class="btn btn-sm btn-outline-secondary" type="btn btn-success"></a>
-
 			</p>
 		}
 

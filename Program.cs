@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SearchEngine.Controllers;
 using SearchEngine.Data;
 using SearchEngine.Data.Repositories;
 
@@ -11,7 +12,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationContext>();
 
 builder.Services.AddScoped<IPageRepository, PageRepository>();
-builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<CounterRepository>();
 builder.Services.AddScoped<ISiteRepository, SiteRepository>();
 
 builder.Services.AddControllers();
