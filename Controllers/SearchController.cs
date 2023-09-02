@@ -17,7 +17,7 @@ public class SearchController : Controller
 	}
 
 
-	public IActionResult Search(string searchString, int onPage = 10)
+	public IActionResult Search(string searchString)
 	{
 		var tokens = searchString.Split(Tokenizer.Splitter, StringSplitOptions.RemoveEmptyEntries);
 
@@ -43,7 +43,6 @@ public class SearchController : Controller
 
 		var pages = rating
 			.OrderByDescending(v => v.Value)
-			.Take(onPage)
 			.Select(v => v.Key)
 			.ToList()
 			.Select(item => _pageRepository.GetAsync(item).Result)
